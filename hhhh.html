@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>English Challenge</title>
+</head>
+<body onload="next();">
+	<p>English challenge!</p>
+	<hr>
+	<p><span id="qq">?</span>What is the correct spelling?</p>
+	<input type="radio" name="pp" onclick="ans=1;" id="c1"><span id="s0">?</span>&nbsp;
+	<input type="radio" name="pp" onclick="ans=2;" id="c2"><span id="s1">?</span>&nbsp;
+	<input type="radio" name="pp" onclick="ans=3;" id="c3"><span id="s2">?</span><br>
+	<button onclick="check();">Check Answer</button>
+	<button onclick="next();">Next</button>
+	<button onclick="reset();next();">Try Again</button><br>
+	<p><span id="fb1">?</span></p>
+	<hr>
+	<button onclick="showerror();">Show Error</button>
+	<p><span id="er1">?</span></p>
+	
+	<script>
+		var n, sc=0, i=0, ans=0, prev=-1, answered=false;
+		var quest=['大眾','沃爾沃','寶馬','保時捷','雷諾','豐田','三菱','瑪莎拉蒂','馬自達', '勒克斯根'];
+		var correct=[1,2,3,1,2,3,1,2,3,2];
+		var reply=[0,0,0,0,0,0,0,0,0,0];
+		var item=['Volkswagen','Volvo','BMW','Porsche','Renault','Toyota','Mitsubishi','Maserati','Mazda','Luxgen'];
+		
+		function check() {
+			var msg="";
+			if (ans==correct[i-1]) {
+				sc+=5;
+				msg="Correct!"+"<img src=o.gif width=60 height=60 aligh=middle>";
+				reply[i-1]=1;
+			} else {
+				msg="Incorrect!"+"<img src=x.jpg width=60 height=60 aligh=middle>";
+				reply[i-1]=0;
+				closesel();
+				answered=true;
+			}
+			var op1=document.getElementById('fb1');
+			op1.innerHTML="<span style='color:red'>"+msg+" Score: "+sc+"</span>";
+		}
+
+		function next() {
+			if (answered) {
+				alert("Please click 'Try Again' or 'Next' to continue.");
+				return;
+			}
+			//sequentially generate test item
+			var count=0;
+			do {
+				n = Math.floor(Math.random() * item.length);
+				count++;
+			} while (n==prev && count<50);
+			prev=n;
+			opensel();
+			if (i<10) {
+				i++;
+				var q0=document.getElementById('qq');
+				var ref0=document.getElementById('s0');
+				var ref1=document.getElementById('s1');
+				var ref2=document.getElementById('s2');
+				q0.innerHTML= quest[i-1];
+ref0.innerHTML= item[n];
+ref1.innerHTML= item[(n+3)%item.length];
+ref2.innerHTML= item[(n+6)%item.length];
+document.getElementById('c1').checked = false;
+document.getElementById('c2').checked = false;
+document.getElementById('c3').checked = false;
+answered=false;
+var op1=document.getElementById('fb1');
+op1.innerHTML="<span id='fb1'>?</span>";
+} else {
+alert("You have finished the test! Your final score is "+sc);
+}
+}
+function reset() {
+    answered = false;
+		sc=0;
+		i=0;
+		prev=-1;
+		reply=[0,0,0,0,0,0,0,0,0,0];
+		next();
+	}
+
+	function opensel() {
+		var sel1=document.getElementById('s0');
+		var sel2=document.getElementById('s1');
+		var sel3=document.getElementById('s2');
+		sel1.style.visibility="visible";
+		sel2.style.visibility="visible";
+		sel3.style.visibility="visible";
+	}
+
+	function closesel() {
+		var sel1=document.getElementById('s0');
+		var sel2=document.getElementById('s1');
+		var sel3=document.getElementById('s2');
+		sel1.style.visibility="hidden";
+		sel2.style.visibility="hidden";
+		sel3.style.visibility="hidden";
+	}
+
+	function showerror() {
+		var er1=document.getElementById('er1');
+		var msg="";
+		for (j=0;j<reply.length;j++) {
+			if (reply[j]==0) {
+				msg+= (j+1) + ", ";
+			}
+		}
+		if (msg=="") {
+			msg="None";
+		} else {
+			msg=msg.slice(0,-2);
+		}
+		er1.innerHTML="The following questions were answered incorrectly: "+msg;
+	}
+</script>
+</body>
+</html>
